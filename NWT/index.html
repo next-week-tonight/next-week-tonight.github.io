@@ -26,8 +26,8 @@
 
 <div><b>Abstract:</b> In this work we introduce NWT, an expressive speech-to-video model. Unlike approaches that use domain-specific intermediate representations such as pose
     keypoints, NWT learns its own latent representations, with minimal assumptions about the audio and video content. To this end, we propose a novel discrete variational
-    autoencoder with adversarial loss, dVAE-Adv, which learns a new discrete latent representation we call MemCodes. MemCodes are straightforward to implement, require no additional
-    loss terms, are stable to train compared with other approaches, and show evidence of interpretability. To predict on the MemCode space, we use an autoregressive encoder-decoder
+    autoencoder with adversarial loss, dVAE-Adv, which learns a new discrete latent representation we call Memcodes. Memcodes are straightforward to implement, require no additional
+    loss terms, are stable to train compared with other approaches, and show evidence of interpretability. To predict on the Memcode space, we use an autoregressive encoder-decoder
     model conditioned on audio. Additionally, our model can control latent attributes in the generated video that are not annotated in the data. We train NWT on clips from
     HBO’s Last Week Tonight with John Oliver. NWT consistently scores above other approaches in Mean Opinion Score (MOS) on tests of overall video naturalness, facial
     naturalness and expressiveness, and lipsync quality. This work sets a strong baseline for generalized audio-to-video synthesis. Samples are available at
