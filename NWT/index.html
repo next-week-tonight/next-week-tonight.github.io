@@ -1,94 +1,111 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Video samples from "NWT: Towards natural audio-to-video generation with representation learning"</title>
+    <title>"NWT: Towards natural audio-to-video generation with representation learning"</title>
     <link rel="shortcut icon" href="images/newt.png">
 </head>
 <body>
-<article>
-    <header>
-        <h1>NWT: Towards natural audio-to-video generation with representation learning</h1>
-    </header>
-</article>
+<!--<article>-->
+<!--    <header>-->
+<!--        <h1>NWT: Towards natural audio-to-video generation with representation learning</h1>-->
+<!--    </header>-->
+<!--</article>-->
 
-<div>
-    <b>Note:</b>
-    <span style="background-color: #00FF00">
-        This page contains the unaltered outputs of NWT models.<br>
-        For convenience, we provide a higher resolution version of the samples from this page <a href="https://next-week-tonight.github.io/NWT_super_resolution/">here</a>.<br>
-        The upscaling happens with a super resolution neural network so the upscaled videos can have some minor details different from our actual models' outputs.<br>
-        If you care about seeing NWT's samples without any modifications, we recommend watching the videos on this page.<br>
-    </span>
-</div>
+<!--<div>-->
+<!--    <b>Note:</b>-->
+<!--    <span style="background-color: #00FF00">-->
 
-<p><b>Paper:</b> <a href="PAPER LINK PLACEHOLDER">arXiv</a> (coming soon)</p>
+<!--        We introduce NWT, a [intro sentence]-->
+
+
+<!--        This page contains the unaltered outputs of NWT models.<br>-->
+
+<!--        For convenience, we provide a higher resolution version of the samples from this page-->
+<!--        <a href="https://next-week-tonight.github.io/NWT_super_resolution/">here</a>.<br>-->
+<!--        The upscaling happens with a super resolution neural network so the upscaled videos can have some minor details different from our actual models' outputs.<br>-->
+<!--        If you care about seeing NWT's samples without any modifications, we recommend watching the videos on this page.<br>-->
+<!--    </span>-->
+<!--</div>-->
+
+<!--<p><b>Paper:</b> <a href="PAPER LINK PLACEHOLDER">arXiv</a> (coming soon)</p>-->
 <!--<p><b>Authors</b>: Rayhane Mama, Marc S. Tyndel, Hashiam Kadhim, Cole Clifford, Ragavan Thurairatnam</p>-->
 
-<div><b>Abstract:</b> In this work we introduce NWT, an expressive speech-to-video model. Unlike approaches that use domain-specific intermediate representations such as pose
-    keypoints, NWT learns its own latent representations, with minimal assumptions about the audio and video content. To this end, we propose a novel discrete variational
-    autoencoder with adversarial loss, dVAE-Adv, which learns a new discrete latent representation we call Memcodes. Memcodes are straightforward to implement, require no additional
-    loss terms, are stable to train compared with other approaches, and show evidence of interpretability. To predict on the Memcode space, we use an autoregressive encoder-decoder
-    model conditioned on audio. Additionally, our model can control latent attributes in the generated video that are not annotated in the data. We train NWT on clips from
-    HBO’s Last Week Tonight with John Oliver. NWT consistently scores above other approaches in Mean Opinion Score (MOS) on tests of overall video naturalness, facial
-    naturalness and expressiveness, and lipsync quality. This work sets a strong baseline for generalized audio-to-video synthesis. Samples are available at
-    https://next-week-tonight.github.io/NWT/.
+<div>
+
+
+    NWT is an end-to-end model that synthesizes video from audio.
+    <!-- TODO side note on "NWT" (standing for "Next Week Tonight", pronounced "newt") -->
+
+    We trained our model on a dataset of John Oliver speaking, mostly looking at a camera
+    at his desk on Last Week Tonight. John Oliver is a unique subject
+    with a large variety of gestures and expressions.
+    The dataset covers several years of his show, with noticeable variation
+    in clothes, seating position, lighting, camera, hair, and age.
+    NWT is capable of generating natural-looking videos, and
+    has the ability to control some labelled and unlabelled variation.
+
+<!--    [Choose couple samples]-->
+
+
+    <br><br> VQ-VAE shows that freeform video generation is possible, we extend these
+    findings to show that we can condition such a video generator on external inputs
+
 
 </div>
 
 &nbsp;
 
 <div>
-    <b>Note:</b>
-    <span style="background-color: #FFFF00">To best enjoy the samples, we strongly recommend to wear headphones and ensure the screen has good brightness. Some bluetooth headphones
-        cause the audio to play in delay on this page, we recommend you pick the proper audio and visual setup that plays
-        the following target (not generated) video perfectly, with flawless lip sync and good visibility.<br></span>
-    <td>
-        <video width="224" height="256" controls="true" poster="">
-            <source type="video/mp4" src="videos/setup/setup_video.mp4"/>
-        </video>
-    </td>
+    <a name="overview"><h1>Overview</h1></a>
+    <div class="h3_explainer">
+        Like VQ-VAE, NWT is made of two models: a video autoencoder to create a
+        quantized latent representation, and an autoregressive prior model to
+        generate new videos. We frame the autoregressive model as an encoder-decoder
+        model that converts an audio sequence to a sequence of quantized latent
+        video frames. <!-- rephrasing "frame" maybe todo -->
+        We also design NWT to be able to control labelled and unlabelled attributes
+        of the videos.
+
+
+<!--        <br><br> Generative models have a multitude of uses. We discuss-->
+<!--        some of the potential societal impacts-->
+<!--        the paper.-->
+
+
+        <br><br><br>INSERT HASH VIDEO HERE<br>
+
+        <br>
+    </div>
 </div>
 
 <div>
-    <p><br>All of the below samples are generated from the test set audio, and were not seen by the model during training.</p>
-</div>
+    <a name="results"><h1>Results </h1></a>
+    <div class="h3_explainer">
+        NWT is capable of generating natural videos with a significant
+        expressive range.
 
-<p class="toc_title"><b>Contents</b></p>
-<div id="toc_container">
-    <ul>
-        <li><a href="#style_sampling">S1. NWT's random samples (section 3.3)</a></li>
-        <ul>
-            <li><a href="#style_sampling.random_mar">S1.1 Random MAR samples</a></li>
-            <li><a href="#style_sampling.random_far">S1.2 Random FAR samples</a></li>
-        </ul>
-        <li><a href="#episode_control">S2. Episode control (section 3.4)</a></li>
-        <ul>
-            <li><a href="#episode_control.a2v">S2.1 Audio to Video (Bottom level)</a></li>
-            <li><a href="#episode_control.v2v">S2.2 Video to Video (Top level)</a></li>
-            <li><a href="#episode_control.quick_change">S2.3 Mid sample quick change</a></li>
-        </ul>
-        <li><a href="#style_control">S3. Style control (section 3.5)</a></li>
-        <ul>
-            <li><a href="#style_control.single_variate">S3.1 Single variate control</a></li>
-            <li><a href="#style_control.reference">S3.2 Copy style from reference</a></li>
-            <li><a href="#style_control.random_prior">S3.3 Random style sampling</a></li>
-        </ul>
-        <li><a href="#models_comparison">S4. FAR vs MAR vs Ground Truth parallel comparison (section 3.3)</a></li>
-        <li><a href="#video_compression_and_reconstruction">S5. Video compression and reconstruction (section 3.6)</a></li>
-    </ul>
-</div>
+        The videos pair well with the audio input.
 
-<p>&nbsp;</p>
+        We can also control a number of aspects of the generation process, which we
+        demonstrate in the next section.
+
+        <br><br>
+        All generated clips shown are model outputs with no post-processing or
+        special tricks. None of these were seen by the model during training time.
+    </div>
+</div>
 
 <!-- Section 3.3 -->
 <div>
-    <a name="style_sampling"><h2>S1. NWT's random samples (section 3.3)</h2></a>
-    <a name="style_sampling.random_mar"><h3>S1.1 Random MAR samples</h3></a>
+    <a name="random_samples"><h2>Random samples</h2></a>
     <div class="h3_explainer">
-        We present random samples generated by the MAR model. We only provide the model with the input audio and the episode index, and we randomly sample from the style
-        latent variable.<br>
+        We select random audio inputs from the test set and generate corresponding video clips.
+        We show that the model's choices tightly correlate with the intonation, tone of voice, and
+        speech contents. The model learns nearly perfect lip syncronization, as well as expressive
+        behaviours such as head movement, facial expressions, body language, and gestures.
     </div>
 
+<!--    TODO shuffle samples-->
     <table>
         <tbody>
         <tr>
@@ -128,18 +145,6 @@
                 </video>
             </td>
         </tr>
-        </tbody>
-    </table>
-
-    <p>&nbsp;</p>
-    <a name="style_sampling.random_far"><h3>S1.2 Random FAR samples</h3></a>
-    <div class="h3_explainer">
-        We present random samples generated by the FAR model. We only provide the model with the input audio and the episode index, and we randomly sample from the style
-        latent variable.<br>
-    </div>
-
-    <table>
-        <tbody>
         <tr>
             <td>
                 <video width="224" height="256" controls="true" poster="">
@@ -186,12 +191,20 @@
 
 <!-- Section 3.4 -->
 <div>
-    <a name="episode_control"><h2>S2. Episode control (section 3.4)</h2></a>
-    <a name="episode_control.a2v"><h3>S2.1 Audio to Video (Bottom level)</h3></a>
+    <a name="episode_control"><h2>Episode Control</h2></a>
     <div class="h3_explainer">
-        We select random audio samples from the test set and we generate the video for each audio several times while changing the episode index that we give the model. <br>
-        In each regeneration experiment, we re-use the same style vector randomly sampled from the style latent.<br>
-        We use the FAR model to generate these samples.
+        Given the diversity of the data, we designed our model to be able to generate
+        visual characteristics matching specified episodes, independently from the audio.
+    </div>
+
+    <a name="episode_control.a2v"><h3>Audio-to-Video</h3></a>
+    <div class="h3_explainer">
+
+        In addition to the obvious visual change in clothing, hair, age, etc., NWT also
+        matches John Oliver's general behaviour to the episode specified. This is due to
+        the imbalance of the dataset, where some episodes feature much more dynamic behaviour
+        than others.
+
     </div>
 
     <table>
@@ -315,11 +328,14 @@
         </tbody>
     </table>
 
-    <a name="episode_control.v2v"><h3>S2.2 Video to Video (Top Level)</h3></a>
+    <a name="episode_control.v2v"><h3>Video-to-video</h3></a>
     <div class="h3_explainer">
-        We feed real LWT videos to the dVAE-Adv's encoder, and we modify the episode embedding of the dVAE-Adv model then decode the video, resulting in a color change of the
-        "color filters" of the video. In contrast to Audio to Video episode control, this preserves all video details including movements and background position.<br>
-        We denote on the y-axis the episode id of the original input video and on the x-axis, the episode id we want to convert the video to.<br>
+
+        We can also control the episode at the video-to-video model level independently of
+        content i.e. changing John Oliver's
+        appearance and episode colour features without impacting anything else in the video
+        (his behaviour, camera position, background, etc.)
+
     </div>
 
     <table>
@@ -443,13 +459,13 @@
         </tbody>
     </table>
 
-    <a name="episode_control.quick_change"><h3>S2.3 Mid sample quick change</h3></a>
+    <a name="episode_control.quick_change"><h3>Mid-sample quick change</h3></a>
     <div class="h3_explainer">
-        We select random audio samples from the test set and we generate the video for each audio while modifying the episode index 4 times during the generation. The model is
-        tasked to figure out the transitions between episodes and continue the generation by itself.<br>
-        The style vector is randomly sampled from the style latents.<br>
-        We use the FAR model to generate these samples.
-    </div>
+        To experiment with the limits of audio-to-video episode control, we vary
+        the episode identifier several times while generating one clip.
+        Even though this was not an explicit task during training and cannot happen in reality,
+        NWT maintains lipsync, motion, and location coherency.
+
 
     <table>
         <tbody>
@@ -524,18 +540,23 @@
 
 <!-- Section 3.5 -->
 <div>
-    <a name="style_control"><h2>S3. Style control (section 3.5)</h2></a>
+    <a name="style_control"><h2>Style control</h2></a>
 
-    <a name="style_control.single_variate"><h3>S3.1 latent variate control</h3></a>
+    We describe style as any features of the video that are weakly correlated to the audio.
+
+    This includes variations in camera position and post-production overlays which are very
+    difficult to label in video datasets.
+    Although episode control could be perceived as part of the style, we presented it separately
+    due to its interpretability. In this work episodes were labelled while all other aspects of style
+    were not, however we suspect the model could learn episode-related style without annotation.
+
+    <a name="style_control.single_variate"><h3>Single dimension control</h3></a>
     <div class="h3_explainer">
-        We select random audio samples from the test set and we generate the video for each audio multiple times while changing a single (or few when specified) dimension of the latent
-        gaussian attribute representation of style.<br>
-        Some variates end up being easily interpretable such as dimensions 12, 13 and 15 while some others are more ambiguous like dimension 5.<br>
-        We use the episode id of the audio clip independently from the style vector variation.<br>
-        We use the FAR model to generate these samples.
+        We manually change one dimension of our style representation inside the model and
+        we observe that NWT learned human-interpretable features, such as camera position:
     </div>
 
-    <a name="style_control.single_variate.dimension_12"><h4>Dimension 12 (Vertical Camera Angle: Up -> Down)</h4></a>
+    <a name="style_control.single_variate.dimension_12"><h4>Vertical Camera Angle: Up -> Down</h4></a>
     <table>
         <tbody>
         <tr>
@@ -594,7 +615,7 @@
         </tbody>
     </table>
 
-    <a name="style_control.single_variate.dimension_13"><h4>Dimension 13 (Horizontal Camera Angle: Left -> Right)</h4></a>
+    <a name="style_control.single_variate.dimension_13"><h4>Horizontal Camera Angle: Left -> Right</h4></a>
     <table>
         <tbody>
         <tr>
@@ -653,7 +674,7 @@
         </tbody>
     </table>
 
-    <a name="style_control.single_variate.dimension_15"><h4>Dimension 15 (Camera Zoom: Zoom -> Unzoom)</h4></a>
+    <a name="style_control.single_variate.dimension_15"><h4>Camera Zoom: Zoom -> Unzoom</h4></a>
     <table>
         <tbody>
         <tr>
@@ -712,66 +733,8 @@
         </tbody>
     </table>
 
-    <a name="style_control.single_variate.dimension_5"><h4>Dimension 5</h4></a>
-    <table>
-        <tbody>
-        <tr>
-            <td nowrap>Val =</td>
-            &emsp;
-            <td align="center">μ - 2σ</td>
-            &emsp;
-            <td align="center">μ</td>
-            &emsp;
-            <td align="center">μ + 2σ</td>
-        </tr>
 
-        <tr>
-            <td nowrap>Sample 1</td>
-            &emsp;
-            <td>
-                <video width="224" height="256" controls="true" poster="">
-                    <source type="video/mp4" src="videos/style_control/single_variate/dimension_5/ol-SE_ccFHjL_w_33_decoder_n2.mp4"/>
-                </video>
-            </td>
-            &emsp;
-            <td>
-                <video width="224" height="256" controls="true" poster="">
-                    <source type="video/mp4" src="videos/style_control/single_variate/dimension_5/ol-SE_ccFHjL_w_33_decoder_0.mp4"/>
-                </video>
-            </td>
-            &emsp;
-            <td>
-                <video width="224" height="256" controls="true" poster="">
-                    <source type="video/mp4" src="videos/style_control/single_variate/dimension_5/ol-SE_ccFHjL_w_33_decoder_2.mp4"/>
-                </video>
-            </td>
-        </tr>
-
-        <tr>
-            <td nowrap>Sample 2</td>
-            &emsp;
-            <td>
-                <video width="224" height="256" controls="true" poster="">
-                    <source type="video/mp4" src="videos/style_control/single_variate/dimension_5/ol-SE_ccFHjL_w_195_decoder_n2.mp4"/>
-                </video>
-            </td>
-            &emsp;
-            <td>
-                <video width="224" height="256" controls="true" poster="">
-                    <source type="video/mp4" src="videos/style_control/single_variate/dimension_5/ol-SE_ccFHjL_w_195_decoder_0.mp4"/>
-                </video>
-            </td>
-            &emsp;
-            <td>
-                <video width="224" height="256" controls="true" poster="">
-                    <source type="video/mp4" src="videos/style_control/single_variate/dimension_5/ol-SE_ccFHjL_w_195_decoder_2.mp4"/>
-                </video>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <a name="style_control.single_variate.dimension_12_13_15"><h4>Dimension 12 + 13 + 15 (Camera Angle and zoom: Top Left zoom -> Bottom right unzoom)</h4></a>
+    <a name="style_control.single_variate.dimension_12_13_15"><h4>Combination: Top Left zoom -> Bottom right unzoom</h4></a>
     <table>
         <tbody>
         <tr>
@@ -830,14 +793,13 @@
         </tbody>
     </table>
 
-    <a name="style_control.reference"><h3>S3.2 Copy style from reference</h3></a>
+    <a name="style_control.reference"><h3>Copy style from reference</h3></a>
     <div class="h3_explainer">
-        We select random audio samples from the test set and we generate the video for each audio multiple times while changing the reference video used to generate a style input
-        input.<br>
-        The top row is the reference video input of the model, encoded and decoded by the dVAE-Adv.<br>
-        We use the episode id of the audio clip, independently of the reference video.<br>
-        We use reference samples from both the same episode and different episodes to show that style is transferred relatively to the generated episode.<br>
-        We use the FAR model to generate these samples.
+        NWT can copy style from reference videos independently from the audio.
+        The model is capable of copying abstract traits from videos, even if they are
+        from a different episode. This traits are often modified relative to a "default"
+        of the episode, for example moving the camera some amount in a particular direction
+        relative to the episode's standard position.
     </div>
 
     <table>
@@ -946,12 +908,12 @@
         </tbody>
     </table>
 
-    <a name="style_control.random_prior"><h3>S3.3 Random style sampling</h3></a>
+    <a name="style_control.random_prior"><h3>Random style sampling</h3></a>
     <div class="h3_explainer">
-        We select random audio samples from the test set and we generate the video for each audio multiple times while randomly sampling the style vector from the standard normal
-        prior.<br>
-        We use the episode id of the audio clip independently from the style vector variation.<br>
-        We use the FAR model to generate these samples.
+        For completeness we randomly sample multiple times from the learned style representation
+        for a few audio clips.
+
+        This provides a sense of the scope of traits learned by style.
     </div>
 
     <table>
@@ -1032,11 +994,12 @@
 
 <!-- Section 3.3 -->
 <div>
-    <a name="models_comparison"><h2>S4. FAR vs MAR vs Ground Truth parallel comparison (section 3.3)</h2></a>
+    <a name="models_comparison"><h2>Ground truth comparisons</h2></a>
     <div class="h3_explainer">
-        We present random samples generated by both the MAR model and the FAR model. We only provide each model with the input audio and the episode index, and we randomly sample
-        from the style latent variable.<br>
-        We also show the ground truth videos as a comparison between what the model is doing and what the real John Oliver did in his show.<br>
+        To show the difference between the model's generated video and the ground truth,
+        we generate each audio clip twice and show it to the corresponding real video clip.
+        NWT frequently makes different but plausible gestures than in the original videos.
+
     </div>
 
     <table>
@@ -1258,11 +1221,17 @@
 
 <!-- Section 3.6 -->
 <div>
-    <a name="video_compression_and_reconstruction"><h2>S5. Video compression and reconstruction (section 3.6)</h2></a>
+    <a name="video_compression_and_reconstruction"><h2>Video compression and reconstruction</h2></a>
     <div class="h3_explainer">
-        We present random samples compressed and reconstructed by the dVAE-Adv. We provide the model with the episode id of the input video.<br>
-        We feed the same video to both our 16x14 model (Mem16) and our 8x7 model (Mem8), and we show the reconstruction of each model.<br>
-        We also show the Ground truth video before any compression and the compressed and restored video with h264.<br>
+        A biproduct of the video-to-video portion of NWT is its ability to compress and reconstruct video
+        within the domain it was trained on.
+
+        We show the efficiency of this model by showing ground truth general H264 compression
+        and our model's reconstructions.
+
+        Despite that our models can do both 2x and 4x compression compared to h264, the
+        reconstructions are still perceptually comparable.
+
     </div>
 
     <table>
@@ -1444,7 +1413,7 @@
 </div>
 
 <div>
-    <p><br>The dataset was created using content downloaded from the official Last Week Tonight <a href="https://www.youtube.com/user/LastWeekTonight">youtube channel</a>.<br>
+    <p><br>The dataset was created using content downloaded from the official HBO Last Week Tonight <a href="https://www.youtube.com/user/LastWeekTonight">youtube channel</a>.<br>
         The original videos used in this project fall under the Youtube standard <a href="https://www.youtube.com/t/terms">license</a>.</p>
 </div>
 
