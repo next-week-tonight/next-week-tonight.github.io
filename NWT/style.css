@@ -11,7 +11,7 @@ header {
     margin: 0 auto;
     padding: 0;
     text-align: center;
-    height: 80px;
+    height: 500px;
 }
 
 .header-wrapper h2 {
@@ -48,7 +48,7 @@ header {
 }
 
 .content-wrapper h1, .content-wrapper h2, .content-wrapper h3 {
-    margin-top: 10px;
+    margin-top: 50px;
 }
 
 h1, h2, h3 {
@@ -57,6 +57,12 @@ h1, h2, h3 {
     width: 1200px;
     text-align: left;
     font-family: 'Roboto', sans-serif;
+}
+
+.content-wrapper h4 {
+    margin: 0 auto;
+    padding: 0;
+    margin-top: 30px;
 }
 
 
