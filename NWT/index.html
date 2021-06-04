@@ -16,19 +16,16 @@
     <div class="header-wrapper">
         <h2>NWT: Towards natural audio-to-video generation with representation learning</h2>
         <img src="./images/nwt.png">
-        <h4>22 minute read</h4>
+        <h4>29 minute read</h4>
     </div>
 </header>
 
 <div class="content-wrapper">
-    <p><b>Paper:</b> <a href="PAPER LINK PLACEHOLDER">arXiv</a> (coming soon)</p>
-    <!--            <p><b>Authors</b>: Rayhane Mama, Marc S. Tyndel, Hashiam Kadhim, Cole Clifford, Ragavan Thurairatnam</p>-->
+    <p><b>Paper:</b> <a href="PAPER LINK PLACEHOLDER">arXiv</a></p>
 
     <div>
-
         <div class="h3_explainer">
-
-            NWT<sup class="footnote-ref"><a href="#note1" id="ref1" title="Note how this title appears on hover">[1]</a></sup>
+            NWT<sup class="footnote-ref"><a href="#nwt_name_footnoteb" id="nwt_name_footnote">[1]</a></sup>
             is an end-to-end model that synthesizes video
             from audio.
 
@@ -39,10 +36,7 @@
             in clothes, seating position, lighting, camera, hair, and age.
             NWT is capable of generating natural-looking videos, and
             has the ability to control some labelled and unlabelled variation.
-
         </div>
-
-        <br>
         <table>
             <tbody>
             <tr>
@@ -69,7 +63,8 @@
 
 
         <div class="h3_explainer">
-            <br> VQ-VAE shows that freeform video generation is possible, we extend these
+            <br> VQ-VAE<sup class="reference-ref"><a href="#vq_referenceb" id="vq_reference">1</a></sup> shows that free-form video generation is
+            possible, we extend these
             findings to show that we can condition such a video generator on external inputs
         </div>
 
@@ -94,13 +89,11 @@
             <!--        some of the potential societal impacts-->
             <!--        the paper.-->
 
-            <br>
             <iframe width="910" height="512" src="https://www.youtube.com/embed/54D6J8zHWXk"
                     title="YouTube video player"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen>
             </iframe>
-            <br>
         </div>
     </div>
 
@@ -1298,7 +1291,7 @@
         <div>
             <a name="video_compression_and_reconstruction"><h2>Video compression and reconstruction</h2></a>
             <div class="h3_explainer">
-                A biproduct of the video-to-video portion of NWT is its ability to compress and reconstruct video
+                A bi-product of the video-to-video portion of NWT is its ability to compress and reconstruct video
                 within the domain it was trained on.
 
                 We show the efficiency of this model by showing ground truth general H264 compression
@@ -1491,9 +1484,11 @@
 
                 <br><br>
                 Our discretization approach is done with a new gradient
-                approximation technique based on attention mechanisms.
+                approximation technique based on attention mechanisms<sup class="reference-ref"><a href="luong_attentionb" id="luong_attention">2</a></sup>,<sup
+                    class="reference-ref"><a href="#att_isallyouneedb" id="att_isallyouneed">3</a></sup>.
 
-                We also take inspiration from [cite] and [cite], and train
+                We also take inspiration from controllable expressiveness of text-to-speech models
+                <sup class="reference-ref"><a href="#hier_tacob" id="hier_taco">4</a></sup>, and train
                 our models to be able to control annotated and unannotated features of the videos.
 
                 More details are available in the <a href="PAPER LINK PLACEHOLDER">paper</a>.
@@ -1511,22 +1506,21 @@
                     part of the synthesis
                     input, or both. <br><br>
 
-                    Speech2vid \cite{speech2vid} was the first work to use raw audio data
+                    Speech2vid<sup class="reference-ref"><a href="#speech_to_vidb" id="speech_to_vid">5</a></sup> was the first work to use raw audio data
                     to generate a talking head,
                     modifying frames from a reference image or video.
-                    Synthesizing Obama \cite{supasorn} demonstrated
+                    Synthesizing Obama<sup class="reference-ref"><a href="#obamab" id="obama">6</a></sup> demonstrated
                     substantially better perceptual quality, trained on a single subject.
                     It uses a network to predict lip shape, which is used to synthesize mouth shapes,
                     which are recomposed into video frames using reference frames.
                     Neural Voice Puppetry aims to be quickly adaptable to multiple subjects with
-                    a few minutes of additional video data \cite{Thies2020NeuralVoicePuppetry}.
+                    a few minutes of additional video data<sup class="reference-ref"><a href="#puppetryb" id="puppetry">7</a></sup>.
                     It accomplishes this by using a non-subject specific 3D face model as an
                     intermediate representation, followed by a rendering network that can be quickly
-                    tuned to produce subject-specific video. Wav2Lip \cite{wav2lip_Prajwal_2020} puts emphasis
+                    tuned to produce subject-specific video. Wav2Lip<sup class="reference-ref"><a href="#wav2lipb" id="wav2lip">8</a></sup> puts emphasis
                     on being content-neutral; using reference frames it can produce compelling
                     lipsync results on unseen video. This also allows
-                    it to include hand movement and body movement. Speech2Video
-                    \cite{liao2020speech2video}
+                    it to include hand movement and body movement. Speech2Video<sup class="reference-ref"><a href="#speech2videob" id="speech2video">9</a></sup>
                     (not to be confused with the similarly named Speech2vid mentioned above) uses
                     pose as its intermediate representation and a labelled pose dictionary for
                     each subject.
@@ -1538,7 +1532,7 @@
                     The video rendering stage must make many assumptions from
                     intermediate representations with low information content, in order to construct expressive
                     motion. Small differences in facial expression can communicate highly significant
-                    expressive distinctions \cite{warsawfacialexpressions}, resulting in important
+                    expressive distinctions<sup class="reference-ref"><a href="#expressionsb" id="expressions">10</a></sup>, resulting in important
                     expressive variations being represented with very little change in most
                     intermediate representations of a face. As a result, even if those differences
                     are actually highly correlated with learned features from the audio input,
@@ -1555,17 +1549,63 @@
 
                 <div class="footnote-section">
                     <hr>
-                    <h4>Footnotes:</h4>
-                    <p id="note1">[1] NWT is an acronym of Next Week Tonight and is pronounced "newt". <a href="#ref1">&#8617;</a>
+                    <h5 class="footnote-header">Footnotes:</h5>
+                    <p id="nwt_name_footnoteb">[1] NWT is an acronym of Next Week Tonight and is pronounced "newt". <a href="#nwt_name_footnote">&#8617;</a>
                     </p>
 
                     <hr>
-                    <h4>Authors:</h4>
+                    <h5 class="footnote-header">References:</h5>
+                    <p id="vq_referenceb">1. van den Oord, A., Vinyals, O., and Kavukcuoglu, K. Neural
+                        discrete representation learning, 2018.<a href="#vq_reference">&#8617;</a>
+                    </p>
+                    <p id="luong_attentionb">2. Luong, M.-T., Pham, H., and Manning, C. D. Effective approaches
+                        to attention-based neuralmachine translation, 2015.<a href="#luong_attention">&#8617;</a>
+                    </p>
+                    <p id="att_isallyouneedb">3. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., and
+                        Polosukhin, I. Attention is all you need, 2017.<a href="#att_isallyouneed">&#8617;</a>
+                    </p>
+                    <p id="hier_tacob">4. Hsu, W.-N., Zhang, Y., Weiss, R., Zen, H., Wu, Y., Cao, Y., and Wang, Y. Hierarchical
+                        generative modeling for controllable speech synthesis. In International Conference on Learning
+                        Representations, 2019. URL https://openreview.net/forum?id=rygkk305YQ. <a href="#hier_taco">&#8617;</a>
+                    </p>
+                    <p id="speech_to_vidb">5. Chung, J. S., Jamaludin, A., and Zisserman, A. You said that? In British Machine Vision
+                        Conference, 2017. <a href="#speech_to_vid">&#8617;</a>
+                    </p>
+                    <p id="obamab">6. Suwajanakorn, S., Seitz, S. M., and Kemelmacher-Shlizerman, I. Synthesizing obama: Learning
+                        lip sync from audio. ACM Trans. Graph., 36(4), July 2017. ISSN 0730-0301. doi: 10.1145/
+                        3072959.3073640. URL https://doi.org/10.1145/3072959.3073640.<a href="#obama">&#8617;</a>
+                    </p>
+                    <p id="puppetryb">7. Thies, J., Elgharib, M. A., Tewari, A., Theobalt, C., and Nießner, M. Neural voice puppetry:
+                        Audio-driven facial reenactment. In ECCV, 2020.<a href="#puppetry">&#8617;</a>
+                    </p>
+                    <p id="wav2lipb">8. Prajwal, K. R., Mukhopadhyay, R., Namboodiri, V. P., and Jawahar, C. A lip sync expert is all
+                        you need for speech to lip generation in the wild. Proceedings of the 28th ACM International
+                        Conference on Multimedia, Oct 2020. doi: 10.1145/3394171.3413532. URL http://dx.doi.
+                        org/10.1145/3394171.3413532.<a href="#wav2lip">&#8617;</a>
+                    </p>
+                    <p id="speech2videob">9.  Liao, M., Zhang, S., Wang, P., Zhu, H., Zuo, X., and Yang, R. Speech2video synthesis with 3d
+                        skeleton regularization and expressive body poses, 2020.<a href="#speech2video">&#8617;</a>
+                    </p>
+                    <p id="expressionsb">10. Olszanowski, M., Pochwatko, G., Kuklinski, K., Scibor-Rylski, M., Lewinski, P., and Ohme,
+                        R. K. Warsaw set of emotional facial expression pictures: a validation study of facial display
+                        photographs. Frontiers in Psychology, 5:1516, 2015. ISSN 1664-1078. doi: 10.3389/fpsyg.2014.
+                        01516. URL https://www.frontiersin.org/article/10.3389/fpsyg.2014.01516.<a href="#expressions">&#8617;</a>
+                    </p>
+
+                    <hr>
+                    <h5 class="footnote-header">Authors:</h5>
                     <p id="authors">Rayhane Mama, Marc S. Tyndel, Hashiam Kadhim, Cole Clifford, Ragavan
                         Thurairatnam</p>
 
                     <hr>
-                    <h4>License:</h4>
+                    <h5 class="footnote-header">Acknowledgments:</h5>
+                    <p id="acknowledgments">We would like to thank Alex Krizhevsky for his ideas and mentorship.
+                    We also thank Alyssa Kuhnert, Aydin Polat, Joe Palermo, Pippin Lee, Stephen Piron, and Vince Wong for suggestions,
+                    resources, and invaluable support.
+                    </p>
+
+                    <hr>
+                    <h5 class="footnote-header">License:</h5>
                     <p id="license">The dataset was created using content downloaded from the official HBO Last Week
                         Tonight <a href="https://www.youtube.com/user/LastWeekTonight">youtube
                             channel</a>.<br>
