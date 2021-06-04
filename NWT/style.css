@@ -4,23 +4,43 @@ body {
 }
 header {
     width: 100%;
-    background-color: black;
+    background-color: grey;
 }
 .header-wrapper {
-    width: 1000px;
+    width: 100%;
     margin: 0 auto;
     padding: 0;
     text-align: center;
-    height: 500px;
+    height: 400px;
 }
 
 .header-wrapper h2 {
-    width: 700px;
+    width: 55%;
     padding-top: 15px;
+    margin-left: 2%;
     color: white;
     font-style: italic;
-    font-size: 52px;
-    text-align: center;
+    font-size: 30px;
+    text-align: left;
+    float: left;
+}
+
+.header-wrapper h4 {
+    width: 71.3%;
+    margin-top: 80%;
+    margin-left: 2%;
+    color: white;
+    font-style: italic;
+    font-size: 15px;
+    text-align: left;
+    float: bottom;
+}
+
+.header-wrapper img {
+    margin: 0 0;
+    padding: 0;
+    float: right;
+    width: 65%;
 }
 
 .content-wrapper {
@@ -59,6 +79,10 @@ header {
 
 .content-wrapper h3 {
     margin-top: 50px;
+}
+
+table {
+    width: 71.3%;
 }
 
 h1, h2, h3 {
