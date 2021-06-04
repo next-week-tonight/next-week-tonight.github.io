@@ -27,7 +27,8 @@
 
                 <div class="h3_explainer">
 
-                    NWT is an end-to-end model that synthesizes video from audio.
+                    NWT<sup class="footnote-ref"><a href="#note1" id="ref1" title="Note how this title appears on hover">[1]</a></sup> is an end-to-end model that synthesizes video
+                    from audio.
                     <!-- TODO side note on "NWT" (standing for "Next Week Tonight", pronounced "newt") -->
 
                     We trained our model on a dataset of John Oliver speaking, mostly looking at a camera
@@ -93,7 +94,7 @@
             <!--        the paper.-->
 
                     <br>
-                    <iframe width="960" height="540" src="https://www.youtube.com/embed/54D6J8zHWXk" title="YouTube video player"
+                    <iframe width="910" height="512" src="https://www.youtube.com/embed/54D6J8zHWXk" title="YouTube video player"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                     </iframe>
                     <br>
@@ -154,13 +155,6 @@
                                 <source type="video/mp4" src="videos/random_far/ol-KEbFtMgGhPY_89_decoder.mp4"/>
                             </video>
                         </td>
-                        &emsp;
-                        <td>
-                            <video width="224" height="256" controls="true" poster="">
-                                <source type="video/mp4" src="videos/random_mar/ol-Wpzvaqypav8_128_decoder.mp4"/>
-                            </video>
-                        </td>
-                        &emsp;
                     </tr>
                     <tr>
                         <td>
@@ -183,6 +177,25 @@
                         &emsp;
                         <td>
                             <video width="224" height="256" controls="true" poster="">
+                                <source type="video/mp4" src="videos/random_mar/ol-Wpzvaqypav8_128_decoder.mp4"/>
+                            </video>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <video width="224" height="256" controls="true" poster="">
+                                <source type="video/mp4" src="videos/random_mar/ol-tXqnRMU1fTs_83_decoder.mp4"/>
+                            </video>
+                        </td>
+                        &emsp;
+                        <td>
+                            <video width="224" height="256" controls="true" poster="">
+                                <source type="video/mp4" src="videos/random_far/ol--rSDUsMwakI_69_decoder.mp4"/>
+                            </video>
+                        </td>
+                        &emsp;
+                        <td>
+                            <video width="224" height="256" controls="true" poster="">
                                 <source type="video/mp4" src="videos/random_far/ol-00wQYmvfhn4_110_decoder.mp4"/>
                             </video>
                         </td>
@@ -192,9 +205,8 @@
                                 <source type="video/mp4" src="videos/random_mar/ol-aRrDsbUdY_k_86_decoder.mp4"/>
                             </video>
                         </td>
-                        &emsp;
-                    </tbody>
                     </tr>
+                    </tbody>
                 </table>
 
             </div>
@@ -478,6 +490,7 @@
                     Even though this was not an explicit task during training and cannot happen in reality,
                     NWT maintains lipsync, motion, and location coherency.
 
+                </div>
 
                 <table>
                     <tbody>
@@ -539,7 +552,6 @@
                     </tr>
                     </tbody>
                 </table>
-            </div>
 
             <p>&nbsp;</p>
 
@@ -796,13 +808,13 @@
                     from a different episode. This traits are often modified relative to a "default"
                     of the episode, for example moving the camera some amount in a particular direction
                     relative to the episode's standard position.
+
+                    <br><br>In the next samples, the first row shows the videos used as source to copy the style from.
                 </div>
 
                 <table>
                     <tbody>
                     <tr>
-                        <td nowrap>Reference =</td>
-                        &emsp;
                         <td>
                             <video width="224" height="256" controls="true" poster="">
                                 <source type="video/mp4" src="videos/style_control/style_transfer/references/ol-0UjpmT5noto_15.mp4"/>
@@ -815,12 +827,12 @@
                             </video>
                         </td>
                         &emsp;
-                        <td>
-                            <video width="224" height="256" controls="true" poster="">
-                                <source type="video/mp4" src="videos/style_control/style_transfer/references/ol-1ZAPwfrtAFY_59.mp4"/>
-                            </video>
-                        </td>
-                        &emsp;
+<!--                        <td>-->
+<!--                            <video width="224" height="256" controls="true" poster="">-->
+<!--                                <source type="video/mp4" src="videos/style_control/style_transfer/references/ol-1ZAPwfrtAFY_59.mp4"/>-->
+<!--                            </video>-->
+<!--                        </td>-->
+<!--                        &emsp;-->
                         <td>
                             <video width="224" height="256" controls="true" poster="">
                                 <source type="video/mp4" src="videos/style_control/style_transfer/references/ol-3kEpZWGgJks_7.mp4"/>
@@ -835,8 +847,6 @@
                     </tr>
 
                     <tr>
-                        <td nowrap>Sample 1</td>
-                        &emsp;
                         <td>
                             <video width="224" height="256" controls="true" poster="">
                                 <source type="video/mp4" src="videos/style_control/style_transfer/ol-0UjpmT5noto_15/ol-SE_ccFHjL_w_33_decoder.mp4"/>
@@ -849,12 +859,12 @@
                             </video>
                         </td>
                         &emsp;
-                        <td>
-                            <video width="224" height="256" controls="true" poster="">
-                                <source type="video/mp4" src="videos/style_control/style_transfer/ol-1ZAPwfrtAFY_59/ol-SE_ccFHjL_w_33_decoder.mp4"/>
-                            </video>
-                        </td>
-                        &emsp;
+<!--                        <td>-->
+<!--                            <video width="224" height="256" controls="true" poster="">-->
+<!--                                <source type="video/mp4" src="videos/style_control/style_transfer/ol-1ZAPwfrtAFY_59/ol-SE_ccFHjL_w_33_decoder.mp4"/>-->
+<!--                            </video>-->
+<!--                        </td>-->
+<!--                        &emsp;-->
                         <td>
                             <video width="224" height="256" controls="true" poster="">
                                 <source type="video/mp4" src="videos/style_control/style_transfer/ol-3kEpZWGgJks_7/ol-SE_ccFHjL_w_33_decoder.mp4"/>
@@ -869,8 +879,6 @@
                     </tr>
 
                     <tr>
-                        <td nowrap>Sample 2</td>
-                        &emsp;
                         <td>
                             <video width="224" height="256" controls="true" poster="">
                                 <source type="video/mp4" src="videos/style_control/style_transfer/ol-0UjpmT5noto_15/ol-SE_ccFHjL_w_195_decoder.mp4"/>
@@ -883,12 +891,12 @@
                             </video>
                         </td>
                         &emsp;
-                        <td>
-                            <video width="224" height="256" controls="true" poster="">
-                                <source type="video/mp4" src="videos/style_control/style_transfer/ol-1ZAPwfrtAFY_59/ol-SE_ccFHjL_w_195_decoder.mp4"/>
-                            </video>
-                        </td>
-                        &emsp;
+<!--                        <td>-->
+<!--                            <video width="224" height="256" controls="true" poster="">-->
+<!--                                <source type="video/mp4" src="videos/style_control/style_transfer/ol-1ZAPwfrtAFY_59/ol-SE_ccFHjL_w_195_decoder.mp4"/>-->
+<!--                            </video>-->
+<!--                        </td>-->
+<!--                        &emsp;-->
                         <td>
                             <video width="224" height="256" controls="true" poster="">
                                 <source type="video/mp4" src="videos/style_control/style_transfer/ol-3kEpZWGgJks_7/ol-SE_ccFHjL_w_195_decoder.mp4"/>
@@ -915,8 +923,6 @@
                 <table>
                     <tbody>
                     <tr>
-                        <td nowrap>Sample 1</td>
-                        &emsp;
                         <td>
                             <video width="224" height="256" controls="true" poster="">
                                 <source type="video/mp4" src="videos/style_control/random_prior/ol-5scez5dqtAc_100_decoder_seed1.mp4"/>
@@ -937,8 +943,6 @@
                     </tr>
 
                     <tr>
-                        <td nowrap>Sample 2</td>
-                        &emsp;
                         <td>
                             <video width="224" height="256" controls="true" poster="">
                                 <source type="video/mp4" src="videos/style_control/random_prior/ol-7-LPcVo7gC0_20_decoder_seed1.mp4"/>
@@ -959,8 +963,6 @@
                     </tr>
 
                     <tr>
-                        <td nowrap>Sample 3</td>
-                        &emsp;
                         <td>
                             <video width="224" height="256" controls="true" poster="">
                                 <source type="video/mp4" src="videos/style_control/random_prior/ol-IS5mwymTIJU_59_decoder_seed1.mp4"/>
@@ -1397,9 +1399,22 @@
                 </table>
             </div>
 
-            <div>
-                <p><br>The dataset was created using content downloaded from the official HBO Last Week Tonight <a href="https://www.youtube.com/user/LastWeekTonight">youtube channel</a>.<br>
-                    The original videos used in this project fall under the Youtube standard <a href="https://www.youtube.com/t/terms">license</a>.</p>
+
+            <div class="footnote-section">
+                <hr>
+                <h4>Footnotes:</h4>
+                <p id="note1">[1] NWT is an acronym of Next Week Tonight and is pronounced "Newt". <a href="#ref1">&#8617;</a></p>
+
+                <hr>
+                <h4>Authors:</h4>
+                <p id="authors">Rayhane Mama, Marc S. Tyndel, Hashiam Kadhim, Cole Clifford, Ragavan Thurairatnam</p>
+
+                <hr>
+                <h4>License:</h4>
+                <p id="license">The dataset was created using content downloaded from the official HBO Last Week Tonight <a href="https://www.youtube.com/user/LastWeekTonight">youtube
+                channel</a>.<br>
+                The original videos used in this project fall under the Youtube standard <a href="https://www.youtube.com/t/terms">license</a>.
+                </p>
             </div>
         </div>
     </body>
