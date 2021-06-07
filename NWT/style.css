@@ -1,5 +1,8 @@
 .entire-page {
-    position:relative
+    position: relative;
+    overflow: auto;
+    margin: 0 auto;
+    padding 0;
 }
 
 body {
@@ -8,22 +11,30 @@ body {
 }
 
 header {
-    width: 100%;
+    width: 1800px; /*100%;*/
     background-color: rgba(32,178,170,0.7);
+    margin: 0 auto;
+    padding: 0;
+    overflow: auto;
+    min-width: 100%;
 }
 
 .header-wrapper {
     width: 1800px;
     margin: 0 auto;
     padding: 0;
+    align-content: center;
     text-align: center;
     height: 520px;
+    /*overflow: auto;*/
 }
 
 .header-wrapper h2 {
-    width: 55%;
+    width: 990px;
+    margin: 0;
+    padding: 0;
     padding-top: 15px;
-    margin-left: 2%;
+    margin-left: 36px;
     color: white;
     font-style: italic;
     font-size: 30px;
@@ -32,9 +43,11 @@ header {
 }
 
 .header-wrapper h4 {
-    width: 98%;
-    padding-top: 0;
-    margin-left: 2%;
+    width: 900px;
+    margin: 0;
+    padding: 0;
+    padding-top: 20px;
+    margin-left: 36px;
     color: white;
     font-style: italic;
     font-size: 15px;
@@ -45,8 +58,12 @@ header {
 .header-wrapper img {
     margin: 0;
     padding: 0;
-    float: right;
+    margin-left: 35%;
+    /*float: right;*/
     width: 65%;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .content-wrapper {
@@ -58,6 +75,7 @@ header {
     /*-webkit-box-shadow: 3px 3px 5px 0px rgba(174, 173, 173, 0.75);*/
     /*-moz-box-shadow: 3px 3px 5px 0px rgba(174, 173, 173, 0.75);*/
     padding-top: 30px;
+    /*overflow: auto;*/
 }
 
 .footnote-section {
@@ -68,7 +86,7 @@ header {
 
 .footnote-header {
     width: 10%;
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     text-align: justify;
     float: left;
