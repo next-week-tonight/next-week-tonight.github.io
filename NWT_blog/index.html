@@ -1,0 +1,1622 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NWT: Towards natural audio-to-video generation with representation learning</title>
+    <link rel="shortcut icon" href="images/newt.png">
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;900&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="entire-page">
+<header>
+    <div class="header-wrapper">
+        <h2>NWT: Towards natural audio-to-video generation <br>with representation learning</h2>
+        <img src="./images/nwt.png">
+        <h4>29 minute read</h4>
+    </div>
+</header>
+
+<div class="content-wrapper">
+    <p><b>Paper:</b> <a href="https://arxiv.org/abs/2106.04283">arXiv</a></p>
+
+    <div>
+        <div class="h3_explainer">
+            NWT<sup class="footnote-ref"><a href="#nwt_name_footnoteb" id="nwt_name_footnote">[1]</a></sup>
+            is an end-to-end model that synthesizes video
+            from audio.
+
+            We trained our model on a dataset of John Oliver speaking, mostly looking at a camera
+            at his desk on Last Week Tonight. John Oliver is a unique subject
+            with a large variety of gestures and expressions.
+            The dataset covers several years of his show, with noticeable variation
+            in clothes, seating position, lighting, camera, hair, and age.
+            NWT is capable of generating natural-looking videos, and
+            has the ability to control some labelled and unlabelled variation.
+        </div>
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_mar/ol-tXqnRMU1fTs_83_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_far/ol--rSDUsMwakI_69_decoder.mp4"/>
+                    </video>
+                </td>
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/quick_change/ol-i8xwLWb0lLY_120_decoder_seq3.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <div class="h3_explainer">
+            <br> VQ-VAE<sup class="reference-ref"><a href="#vq_referenceb" id="vq_reference">1</a></sup> shows that free-form video generation is
+            possible, we extend these
+            findings to show that we can condition such a video generator on external inputs
+        </div>
+
+
+    </div>
+
+    &nbsp;
+
+    <div>
+        <a name="overview"><h1>Overview</h1></a>
+        <div class="h3_explainer">
+            Like VQ-VAE, NWT is made of two models: a video autoencoder to create a
+            quantized latent representation, and an autoregressive prior model to
+            generate new videos. We frame the autoregressive model as an encoder-decoder
+            model that converts an audio sequence to a sequence of quantized latent
+            video frames. <!-- rephrasing "frame" maybe todo -->
+            We also design NWT to be able to control labelled and unlabelled attributes
+            of the videos.
+
+
+            <!--        <br> Generative models have a multitude of uses. We discuss-->
+            <!--        some of the potential societal impacts-->
+            <!--        the paper.-->
+
+            <iframe width="910" height="512" src="https://www.youtube.com/embed/54D6J8zHWXk"
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <div>
+        <a name="results"><h1>Results </h1></a>
+        <div class="h3_explainer">
+            NWT is capable of generating natural videos with a significant
+            expressive range.
+
+            The videos pair well with the audio input.
+
+            We can also control a number of aspects of the generation process, which we
+            demonstrate in the next section.
+
+            <br>
+            All generated clips shown are model outputs with no post-processing or
+            special tricks. None of these were seen by the model during training time.
+        </div>
+    </div>
+
+    <!-- Section 3.3 -->
+    <div>
+        <a name="random_samples"><h2>Random samples</h2></a>
+        <div class="h3_explainer">
+            We select random audio inputs from the test set and generate corresponding video clips.
+            We show that the model's choices tightly correlate with the intonation, tone of voice, and
+            speech contents. The model learns nearly perfect lip syncronization, as well as expressive
+            behaviours such as head movement, facial expressions, body language, and gestures.
+        </div>
+
+        <!--    TODO shuffle samples-->
+        <table>
+            <tbody>
+            <tr>
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_mar/ol-LdhQzXHYLZ4_148_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_mar/ol-AjqaNQ018zU_117_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_far/ol-_ECYMvjU52E_20_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_far/ol-KEbFtMgGhPY_89_decoder.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_mar/ol-gvZSpET11ZY_136_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_far/ol-17oCQakzIl8_59_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_far/ol-aRrDsbUdY_k_79_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_mar/ol-Wpzvaqypav8_128_decoder.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_mar/ol-tXqnRMU1fTs_83_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_far/ol--rSDUsMwakI_69_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_far/ol-00wQYmvfhn4_110_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/random_mar/ol-aRrDsbUdY_k_86_decoder.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <p>&nbsp;</p>
+
+    <!-- Section 3.4 -->
+    <div>
+        <a name="episode_control"><h2>Episode Control</h2></a>
+        <div class="h3_explainer">
+            Given the diversity of the data, we designed our model to be able to generate
+            visual characteristics matching specified episodes, independently from the audio.
+        </div>
+
+        <a name="episode_control.a2v"><h3>Audio-to-Video</h3></a>
+        <div class="h3_explainer">
+
+            In addition to the obvious visual change in clothing, hair, age, etc., NWT also
+            matches John Oliver's general behaviour to the episode specified. This is due to
+            the imbalance of the dataset, where some episodes feature much more dynamic behaviour
+            than others.
+
+        </div>
+
+        <table>
+            <tbody>
+            <tr>
+                <!--                        <td nowrap>Episode =</td>-->
+                <!--                        &emsp;-->
+                <td align="center">ol-1ZAPwfrtAFY</td>
+                &emsp;
+                <td align="center">ol-DnpO_RTSNmQ</td>
+                &emsp;
+                <td align="center">ol-hkZir1L7fSY</td>
+                &emsp;
+                <td align="center">ol-Ylomy1Aw9Hk</td>
+            </tr>
+
+            <tr>
+                <!--                        <td nowrap>ol-1ZAPwfrtAFY</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-1ZAPwfrtAFY/ol-1ZAPwfrtAFY_75_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-DnpO_RTSNmQ/ol-1ZAPwfrtAFY_75_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-hkZir1L7fSY/ol-1ZAPwfrtAFY_75_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-Ylomy1Aw9Hk/ol-1ZAPwfrtAFY_75_decoder.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <!--                        <td nowrap>ol-DnpO_RTSNmQ</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-1ZAPwfrtAFY/ol-DnpO_RTSNmQ_103_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-DnpO_RTSNmQ/ol-DnpO_RTSNmQ_103_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-hkZir1L7fSY/ol-DnpO_RTSNmQ_103_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-Ylomy1Aw9Hk/ol-DnpO_RTSNmQ_103_decoder.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <!--                        <td nowrap>ol-hkZir1L7fSY</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-1ZAPwfrtAFY/ol-hkZir1L7fSY_138_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-DnpO_RTSNmQ/ol-hkZir1L7fSY_138_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-hkZir1L7fSY/ol-hkZir1L7fSY_138_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-Ylomy1Aw9Hk/ol-hkZir1L7fSY_138_decoder.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <!--                        <td nowrap>ol-Ylomy1Aw9Hk</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-1ZAPwfrtAFY/ol-Ylomy1Aw9Hk_31_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-DnpO_RTSNmQ/ol-Ylomy1Aw9Hk_31_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-hkZir1L7fSY/ol-Ylomy1Aw9Hk_31_decoder.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/a2v/ol-Ylomy1Aw9Hk/ol-Ylomy1Aw9Hk_31_decoder.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a name="episode_control.v2v"><h3>Video-to-video</h3></a>
+        <div class="h3_explainer">
+
+            We can also control the episode at the video-to-video model level independently of
+            content i.e. changing John Oliver's
+            appearance and episode colour features without impacting anything else in the video
+            (his behaviour, camera position, background, etc.)
+
+        </div>
+
+        <table>
+            <tbody>
+            <tr>
+                <!--                        <td nowrap>Episode =</td>-->
+                <!--                        &emsp;-->
+                <td align="center">ol--YkLPxQp_y0</td>
+                &emsp;
+                <td align="center">ol-0UjpmT5noto</td>
+                &emsp;
+                <td align="center">ol-eAFnby2184o</td>
+                &emsp;
+                <td align="center">ol-nh0ac5HUpDU</td>
+            </tr>
+
+            <tr>
+                <!--                        <td nowrap>ol&#45;&#45;YkLPxQp_y0</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol--YkLPxQp_y0/ol--YkLPxQp_y0_30.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol-0UjpmT5noto/ol--YkLPxQp_y0_30.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol-eAFnby2184o/ol--YkLPxQp_y0_30.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol-nh0ac5HUpDU/ol--YkLPxQp_y0_30.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <!--                        <td nowrap>ol-0UjpmT5noto</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/v2v/ol--YkLPxQp_y0/ol-0UjpmT5noto_116.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/v2v/ol-0UjpmT5noto/ol-0UjpmT5noto_116.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/v2v/ol-eAFnby2184o/ol-0UjpmT5noto_116.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/v2v/ol-nh0ac5HUpDU/ol-0UjpmT5noto_116.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <!--                        <td nowrap>ol-eAFnby2184o</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol--YkLPxQp_y0/ol-eAFnby2184o_4.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol-0UjpmT5noto/ol-eAFnby2184o_4.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol-eAFnby2184o/ol-eAFnby2184o_4.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol-nh0ac5HUpDU/ol-eAFnby2184o_4.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <!--                        <td nowrap>ol-nh0ac5HUpDU</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol--YkLPxQp_y0/ol-nh0ac5HUpDU_29.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol-0UjpmT5noto/ol-nh0ac5HUpDU_29.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol-eAFnby2184o/ol-nh0ac5HUpDU_29.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4" src="videos/episode_control/v2v/ol-nh0ac5HUpDU/ol-nh0ac5HUpDU_29.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a name="episode_control.quick_change"><h3>Mid-sample quick change</h3></a>
+        <div class="h3_explainer">
+            To experiment with the limits of audio-to-video episode control, we vary
+            the episode identifier several times while generating one clip.
+            Even though this was not an explicit task during training and cannot happen in reality,
+            NWT maintains lipsync, motion, and location coherency.
+
+        </div>
+
+        <table>
+            <tbody>
+            <tr>
+                <!--                        <td nowrap>Episode Sequence 1</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/quick_change/ol-UC_gXD5OE88_24_decoder_seq1.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/quick_change/ol-vU8dCYocuyI_99_decoder_seq1.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <!--                        <td nowrap>Episode Sequence 2</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/quick_change/ol-ScmJvmzDcG0_15_decoder_seq2.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/quick_change/ol-dXyO_MC9g3k_75_decoder_seq2.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <!--                        <td nowrap>Episode Sequence 3</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/quick_change/ol-i8xwLWb0lLY_120_decoder_seq3.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/quick_change/ol-qMGn9T37eR8_92_decoder_seq3.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            <tr>
+                <!--                        <td nowrap>Episode Sequence 4</td>-->
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/quick_change/ol-dXyO_MC9g3k_86_decoder_seq4.mp4"/>
+                    </video>
+                </td>
+                &emsp;
+                <td>
+                    <video width="224" height="256" controls="true" poster="">
+                        <source type="video/mp4"
+                                src="videos/episode_control/quick_change/ol-R652nwUcJRA_58_decoder_seq4.mp4"/>
+                    </video>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p>&nbsp;</p>
+
+        <!-- Section 3.5 -->
+        <div>
+            <a name="style_control"><h2>Style control</h2></a>
+
+            <div class="h3_explainer">
+                We describe style as any features of the video that are weakly correlated to the audio.
+
+                This includes variations in camera position and post-production overlays which are very
+                difficult to label in video datasets.
+                Although episode control could be perceived as part of the style, we presented it separately
+                due to its interpretability. In this work episodes were labelled while all other aspects of style
+                were not, however we suspect the model could learn episode-related style without annotation.
+            </div>
+
+            <a name="style_control.single_variate"><h3>Single dimension control</h3></a>
+            <div class="h3_explainer">
+                We manually change one dimension of our style representation inside the model and
+                we observe that NWT learned human-interpretable features, such as camera position:
+            </div>
+
+            <a name="style_control.single_variate.dimension_12"><h4>Vertical Camera Angle: Up -> Down</h4></a>
+            <table>
+                <tbody>
+                <!--                    <tr>-->
+                <!--                        <td nowrap>Val =</td>-->
+                <!--                        &emsp;-->
+                <!--                        <td align="center">μ - 2σ</td>-->
+                <!--                        &emsp;-->
+                <!--                        <td align="center">μ</td>-->
+                <!--                        &emsp;-->
+                <!--                        <td align="center">μ + 2σ</td>-->
+                <!--                    </tr>-->
+
+                <tr>
+                    <!--                        <td nowrap>Sample 1</td>-->
+                    <!--                        &emsp;-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12/ol-SE_ccFHjL_w_33_decoder_n2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12/ol-SE_ccFHjL_w_33_decoder_0.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12/ol-SE_ccFHjL_w_33_decoder_2.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+
+                <tr>
+                    <!--                        <td nowrap>Sample 2</td>-->
+                    <!--                        &emsp;-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12/ol-SE_ccFHjL_w_195_decoder_n2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12/ol-SE_ccFHjL_w_195_decoder_0.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12/ol-SE_ccFHjL_w_195_decoder_2.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <a name="style_control.single_variate.dimension_13"><h4>Horizontal Camera Angle: Left -> Right</h4></a>
+            <table>
+                <tbody>
+                <!--                    <tr>-->
+                <!--                        <td nowrap>Val =</td>-->
+                <!--                        &emsp;-->
+                <!--                        <td align="center">μ - 2σ</td>-->
+                <!--                        &emsp;-->
+                <!--                        <td align="center">μ</td>-->
+                <!--                        &emsp;-->
+                <!--                        <td align="center">μ + 2σ</td>-->
+                <!--                    </tr>-->
+
+                <tr>
+                    <!--                        <td nowrap>Sample 1</td>-->
+                    <!--                        &emsp;-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_13/ol-SE_ccFHjL_w_33_decoder_n2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_13/ol-SE_ccFHjL_w_33_decoder_0.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_13/ol-SE_ccFHjL_w_33_decoder_2.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+
+                <tr>
+                    <!--                        <td nowrap>Sample 2</td>-->
+                    <!--                        &emsp;-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_13/ol-SE_ccFHjL_w_195_decoder_n2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_13/ol-SE_ccFHjL_w_195_decoder_0.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_13/ol-SE_ccFHjL_w_195_decoder_2.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <a name="style_control.single_variate.dimension_15"><h4>Camera Zoom: Zoom -> Unzoom</h4></a>
+            <table>
+                <tbody>
+
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_15/ol-SE_ccFHjL_w_33_decoder_n2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_15/ol-SE_ccFHjL_w_33_decoder_0.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_15/ol-SE_ccFHjL_w_33_decoder_2.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+
+                <tr>
+                    <!--                        <td nowrap>Sample 2</td>-->
+                    <!--                        &emsp;-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_15/ol-SE_ccFHjL_w_195_decoder_n2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_15/ol-SE_ccFHjL_w_195_decoder_0.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_15/ol-SE_ccFHjL_w_195_decoder_2.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+            <a name="style_control.single_variate.dimension_12_13_15"><h4>Combination: Top Left zoom -> Bottom right
+                unzoom</h4></a>
+            <table>
+                <tbody>
+                <!--                    <tr>-->
+                <!--                        <td nowrap>Val =</td>-->
+                <!--                        &emsp;-->
+                <!--                        <td align="center">μ - 2σ</td>-->
+                <!--                        &emsp;-->
+                <!--                        <td align="center">μ</td>-->
+                <!--                        &emsp;-->
+                <!--                        <td align="center">μ + 2σ</td>-->
+                <!--                    </tr>-->
+
+                <tr>
+                    <!--                        <td nowrap>Sample 1</td>-->
+                    <!--                        &emsp;-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12_13_15/ol-SE_ccFHjL_w_33_decoder_n2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12_13_15/ol-SE_ccFHjL_w_33_decoder_0.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12_13_15/ol-SE_ccFHjL_w_33_decoder_2.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+
+                <tr>
+                    <!--                        <td nowrap>Sample 2</td>-->
+                    <!--                        &emsp;-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12_13_15/ol-SE_ccFHjL_w_195_decoder_n2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12_13_15/ol-SE_ccFHjL_w_195_decoder_0.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/single_variate/dimension_12_13_15/ol-SE_ccFHjL_w_195_decoder_2.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <a name="style_control.reference"><h3>Copy style from reference</h3></a>
+            <div class="h3_explainer">
+                NWT can copy style from reference videos independently from the audio.
+                The model is capable of copying abstract traits from videos, even if they are
+                from a different episode. This traits are often modified relative to a "default"
+                of the episode, for example moving the camera some amount in a particular direction
+                relative to the episode's standard position.
+
+                <br><br>In the next samples, the first row shows the videos used as source to copy the style from.
+            </div>
+
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/references/ol-0UjpmT5noto_15.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/references/ol-1aheRpmurAo_130.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <!--                        <td>-->
+                    <!--                            <video width="224" height="256" controls="true" poster="">-->
+                    <!--                                <source type="video/mp4" src="videos/style_control/style_transfer/references/ol-1ZAPwfrtAFY_59.mp4"/>-->
+                    <!--                            </video>-->
+                    <!--                        </td>-->
+                    <!--                        &emsp;-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/references/ol-3kEpZWGgJks_7.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/references/ol-SE_ccFHjL_w_50.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/ol-0UjpmT5noto_15/ol-SE_ccFHjL_w_33_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/ol-1aheRpmurAo_130/ol-SE_ccFHjL_w_33_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <!--                        <td>-->
+                    <!--                            <video width="224" height="256" controls="true" poster="">-->
+                    <!--                                <source type="video/mp4" src="videos/style_control/style_transfer/ol-1ZAPwfrtAFY_59/ol-SE_ccFHjL_w_33_decoder.mp4"/>-->
+                    <!--                            </video>-->
+                    <!--                        </td>-->
+                    <!--                        &emsp;-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/ol-3kEpZWGgJks_7/ol-SE_ccFHjL_w_33_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/ol-SE_ccFHjL_w_50/ol-SE_ccFHjL_w_33_decoder.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/ol-0UjpmT5noto_15/ol-SE_ccFHjL_w_195_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/ol-1aheRpmurAo_130/ol-SE_ccFHjL_w_195_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <!--                        <td>-->
+                    <!--                            <video width="224" height="256" controls="true" poster="">-->
+                    <!--                                <source type="video/mp4" src="videos/style_control/style_transfer/ol-1ZAPwfrtAFY_59/ol-SE_ccFHjL_w_195_decoder.mp4"/>-->
+                    <!--                            </video>-->
+                    <!--                        </td>-->
+                    <!--                        &emsp;-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/ol-3kEpZWGgJks_7/ol-SE_ccFHjL_w_195_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/style_transfer/ol-SE_ccFHjL_w_50/ol-SE_ccFHjL_w_195_decoder.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <a name="style_control.random_prior"><h3>Random style sampling</h3></a>
+            <div class="h3_explainer">
+                For completeness we randomly sample multiple times from the learned style representation
+                for a few audio clips.
+
+                This provides a sense of the scope of traits learned by style.
+            </div>
+
+            <table>
+                <tbody>
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/random_prior/ol-5scez5dqtAc_100_decoder_seed1.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/random_prior/ol-5scez5dqtAc_100_decoder_seed2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/random_prior/ol-5scez5dqtAc_100_decoder_seed3.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/random_prior/ol-7-LPcVo7gC0_20_decoder_seed1.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/random_prior/ol-7-LPcVo7gC0_20_decoder_seed2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/random_prior/ol-7-LPcVo7gC0_20_decoder_seed3.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/random_prior/ol-IS5mwymTIJU_59_decoder_seed1.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/random_prior/ol-IS5mwymTIJU_59_decoder_seed2.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4"
+                                    src="videos/style_control/random_prior/ol-IS5mwymTIJU_59_decoder_seed3.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+        <p>&nbsp;</p>
+
+        <!-- Section 3.3 -->
+        <div>
+            <a name="models_comparison"><h2>Ground truth comparisons</h2></a>
+            <div class="h3_explainer">
+                To show the difference between the model's generated video and the ground truth,
+                we generate each audio clip twice and show it to the corresponding real video clip.
+                NWT frequently makes different but plausible gestures than in the original videos.
+
+            </div>
+
+            <table>
+                <tbody>
+                <tr>
+                    <!--                        <td nowrap>Model =</td>-->
+                    <!--                        &emsp;-->
+                    <td align="center">Inference 1</td>
+                    &emsp;
+                    <td align="center">Inference 2</td>
+                    &emsp;
+                    <td align="center">Ground Truth</td>
+                </tr>
+                <tr>
+                    <!--                        <td nowrap>Sample 1</td>-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/far/ol-0Rnq1NpHdmw_30_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/mar/ol-0Rnq1NpHdmw_30_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/gt/ol-0Rnq1NpHdmw_30.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <!--                        <td nowrap>Sample 2</td>-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/far/ol-1Y1ya-yF35g_21_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/mar/ol-1Y1ya-yF35g_21_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/gt/ol-1Y1ya-yF35g_21.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <!--                        <td nowrap>Sample 3</td>-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/far/ol--9QYu8LtH2E_112_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/mar/ol--9QYu8LtH2E_112_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/gt/ol--9QYu8LtH2E_112.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <!--                        <td nowrap>Sample 4</td>-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/far/ol-_ECYMvjU52E_94_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/mar/ol-_ECYMvjU52E_94_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/gt/ol-_ECYMvjU52E_94.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <!--                        <td nowrap>Sample 5</td>-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/far/ol-_tyszHg96KI_92_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/mar/ol-_tyszHg96KI_92_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/gt/ol-_tyszHg96KI_92.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <!--                        <td nowrap>Sample 6</td>-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/far/ol-NnW5EjwtE2U_68_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/mar/ol-NnW5EjwtE2U_68_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/gt/ol-NnW5EjwtE2U_68.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <!--                        <td nowrap>Sample 7</td>-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/far/ol-o8yiYCHMAlM_73_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/mar/ol-o8yiYCHMAlM_73_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/gt/ol-o8yiYCHMAlM_73.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <!--                        <td nowrap>Sample 8</td>-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/far/ol-o8yiYCHMAlM_108_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/mar/ol-o8yiYCHMAlM_108_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/gt/ol-o8yiYCHMAlM_108.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <!--                        <td nowrap>Sample 9</td>-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/far/ol-XzCgVltuzEk_22_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/mar/ol-XzCgVltuzEk_22_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/gt/ol-XzCgVltuzEk_22.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <!--                        <td nowrap>Sample 10</td>-->
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/far/ol-YEGpriv2TAc_59_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/mar/ol-YEGpriv2TAc_59_decoder.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/far_vs_mar/gt/ol-YEGpriv2TAc_59.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>&nbsp;</p>
+
+        <!-- Section 3.6 -->
+        <div>
+            <a name="video_compression_and_reconstruction"><h2>Video compression and reconstruction</h2></a>
+            <div class="h3_explainer">
+                A bi-product of the video-to-video portion of NWT is its ability to compress and reconstruct video
+                within the domain it was trained on.
+
+                We show the efficiency of this model by showing ground truth general H264 compression
+                and our model's reconstructions.
+
+                Despite that our models can do both 2x and 4x compression compared to h264, the
+                reconstructions are still perceptually comparable.
+
+                <br><br>We put the compression rate relative to uncompressed data in parentheses.
+
+            </div>
+            <table>
+                <tbody>
+                <tr>
+                    <td align="center">Ground Truth (1x)</td>
+                    &emsp;
+                    <td align="center">H.264 (200.1x)</td>
+                    &emsp;
+                    <td align="center">NWT (396.1x)</td>
+                    &emsp;
+                    <td align="center">NWT (803.2x)</td>
+                </tr>
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/gt/ol-0V5ckcTSYu8_54.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/h264/ol-0V5ckcTSYu8_54.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem16/ol-0V5ckcTSYu8_54.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem8/ol-0V5ckcTSYu8_54.mp4"/>
+                        </video>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/gt/ol-00wQYmvfhn4_126.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/h264/ol-00wQYmvfhn4_126.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem16/ol-00wQYmvfhn4_126.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem8/ol-00wQYmvfhn4_126.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/gt/ol-17oCQakzIl8_70.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/h264/ol-17oCQakzIl8_70.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem16/ol-17oCQakzIl8_70.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem8/ol-17oCQakzIl8_70.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/gt/ol--9QYu8LtH2E_1.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/h264/ol--9QYu8LtH2E_1.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem16/ol--9QYu8LtH2E_1.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem8/ol--9QYu8LtH2E_1.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/gt/ol--rSDUsMwakI_8.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/h264/ol--rSDUsMwakI_8.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem16/ol--rSDUsMwakI_8.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem8/ol--rSDUsMwakI_8.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/gt/ol--YkLPxQp_y0_64.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/h264/ol--YkLPxQp_y0_64.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem16/ol--YkLPxQp_y0_64.mp4"/>
+                        </video>
+                    </td>
+                    &emsp;
+                    <td>
+                        <video width="224" height="256" controls="true" poster="">
+                            <source type="video/mp4" src="videos/video_compression/Mem8/ol--YkLPxQp_y0_64.mp4"/>
+                        </video>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <p>&nbsp;</p>
+        <div>
+            <a name="approach"><h2>Our approach</h2></a>
+            <div class="h3_explainer">
+                As mentioned above, our approach consists of two separately trained models.
+
+                The first is a video variational autoencoder that unsupervisedly compresses and reconstructs
+                video clips. We constrain the latent space to be a combination of categorical distributions.
+                The second is a encoder-decoder model that takes an audio sequence and predicts the discrete
+                latent
+                video representations.
+
+                <br><br>
+                Our discretization approach is done with a new gradient
+                approximation technique based on attention mechanisms<sup class="reference-ref"><a href="#luong_attentionb" id="luong_attention">2,</a></sup><sup
+                    class="reference-ref"><a href="#att_isallyouneedb" id="att_isallyouneed">3</a></sup>.
+
+                We also take inspiration from controllable expressiveness of text-to-speech models
+                <sup class="reference-ref"><a href="#hier_tacob" id="hier_taco">4</a></sup>, and train
+                our models to be able to control annotated and unannotated features of the videos.
+
+                More details are available in the <a href="https://arxiv.org/abs/2106.04283">paper</a>.
+
+            </div>
+            <div>
+                <a name="approach"><h2>Related work</h2></a>
+                <div class="h3_explainer">
+                    There are a number of
+                    existing approaches to generating video of a talking person
+                    from speech input.
+                    In general, previous approaches make use of either an
+                    engineered intermediate
+                    representation such as pose keypoints, or real reference frames as
+                    part of the synthesis
+                    input, or both. <br><br>
+
+                    Speech2vid<sup class="reference-ref"><a href="#speech_to_vidb" id="speech_to_vid">5</a></sup> was the first work to use raw audio data
+                    to generate a talking head,
+                    modifying frames from a reference image or video.
+                    Synthesizing Obama<sup class="reference-ref"><a href="#obamab" id="obama">6</a></sup> demonstrated
+                    substantially better perceptual quality, trained on a single subject.
+                    It uses a network to predict lip shape, which is used to synthesize mouth shapes,
+                    which are recomposed into video frames using reference frames.
+                    Neural Voice Puppetry aims to be quickly adaptable to multiple subjects with
+                    a few minutes of additional video data<sup class="reference-ref"><a href="#puppetryb" id="puppetry">7</a></sup>.
+                    It accomplishes this by using a non-subject specific 3D face model as an
+                    intermediate representation, followed by a rendering network that can be quickly
+                    tuned to produce subject-specific video. Wav2Lip<sup class="reference-ref"><a href="#wav2lipb" id="wav2lip">8</a></sup> puts emphasis
+                    on being content-neutral; using reference frames it can produce compelling
+                    lipsync results on unseen video. This also allows
+                    it to include hand movement and body movement. Speech2Video<sup class="reference-ref"><a href="#speech2videob" id="speech2video">9</a></sup>
+                    (not to be confused with the similarly named Speech2vid mentioned above) uses
+                    pose as its intermediate representation and a labelled pose dictionary for
+                    each subject.
+
+                    <br><br>
+
+                Engineered intermediate representations have the problem of constraining
+                    the output space.
+                    The video rendering stage must make many assumptions from
+                    intermediate representations with low information content, in order to construct expressive
+                    motion. Small differences in facial expression can communicate highly significant
+                    expressive distinctions<sup class="reference-ref"><a href="#expressionsb" id="expressions">10</a></sup>, resulting in important
+                    expressive variations being represented with very little change in most
+                    intermediate representations of a face. As a result, even if those differences
+                    are actually highly correlated with learned features from the audio input,
+                    the video rendering stage must accomplish the difficult task of detecting
+                    them from a weak signal. <br><br>
+
+                NWT is distinguished by its end-to-end approach that does not require
+                    domain knowledge. This would allow it to be generalized to many other
+                    audio-to-video tasks
+                    in the future.
+
+                </div>
+
+
+                <div class="footnote-section">
+                    <hr>
+                    <h5 class="footnote-header">Footnotes:</h5>
+                    <p id="nwt_name_footnoteb">[1] NWT is an acronym of Next Week Tonight and is pronounced "newt". <a href="#nwt_name_footnote">&#8617;</a>
+                    </p>
+
+                    <hr>
+                    <h5 class="footnote-header">References:</h5>
+                    <p id="vq_referenceb">1. van den Oord, A., Vinyals, O., and Kavukcuoglu, K. Neural
+                        discrete representation learning, 2018.<a href="#vq_reference">&#8617;</a>
+                    </p>
+                    <p id="luong_attentionb">2. Luong, M.-T., Pham, H., and Manning, C. D. Effective approaches
+                        to attention-based neuralmachine translation, 2015.<a href="#luong_attention">&#8617;</a>
+                    </p>
+                    <p id="att_isallyouneedb">3. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., and
+                        Polosukhin, I. Attention is all you need, 2017.<a href="#att_isallyouneed">&#8617;</a>
+                    </p>
+                    <p id="hier_tacob">4. Hsu, W.-N., Zhang, Y., Weiss, R., Zen, H., Wu, Y., Cao, Y., and Wang, Y. Hierarchical
+                        generative modeling for controllable speech synthesis. In International Conference on Learning
+                        Representations, 2019. URL https://openreview.net/forum?id=rygkk305YQ. <a href="#hier_taco">&#8617;</a>
+                    </p>
+                    <p id="speech_to_vidb">5. Chung, J. S., Jamaludin, A., and Zisserman, A. You said that? In British Machine Vision
+                        Conference, 2017. <a href="#speech_to_vid">&#8617;</a>
+                    </p>
+                    <p id="obamab">6. Suwajanakorn, S., Seitz, S. M., and Kemelmacher-Shlizerman, I. Synthesizing obama: Learning
+                        lip sync from audio. ACM Trans. Graph., 36(4), July 2017. ISSN 0730-0301. doi: 10.1145/
+                        3072959.3073640. URL https://doi.org/10.1145/3072959.3073640.<a href="#obama">&#8617;</a>
+                    </p>
+                    <p id="puppetryb">7. Thies, J., Elgharib, M. A., Tewari, A., Theobalt, C., and Nießner, M. Neural voice puppetry:
+                        Audio-driven facial reenactment. In ECCV, 2020.<a href="#puppetry">&#8617;</a>
+                    </p>
+                    <p id="wav2lipb">8. Prajwal, K. R., Mukhopadhyay, R., Namboodiri, V. P., and Jawahar, C. A lip sync expert is all
+                        you need for speech to lip generation in the wild. Proceedings of the 28th ACM International
+                        Conference on Multimedia, Oct 2020. doi: 10.1145/3394171.3413532. URL http://dx.doi.
+                        org/10.1145/3394171.3413532.<a href="#wav2lip">&#8617;</a>
+                    </p>
+                    <p id="speech2videob">9.  Liao, M., Zhang, S., Wang, P., Zhu, H., Zuo, X., and Yang, R. Speech2video synthesis with 3d
+                        skeleton regularization and expressive body poses, 2020.<a href="#speech2video">&#8617;</a>
+                    </p>
+                    <p id="expressionsb">10. Olszanowski, M., Pochwatko, G., Kuklinski, K., Scibor-Rylski, M., Lewinski, P., and Ohme,
+                        R. K. Warsaw set of emotional facial expression pictures: a validation study of facial display
+                        photographs. Frontiers in Psychology, 5:1516, 2015. ISSN 1664-1078. doi: 10.3389/fpsyg.2014.
+                        01516. URL https://www.frontiersin.org/article/10.3389/fpsyg.2014.01516.<a href="#expressions">&#8617;</a>
+                    </p>
+
+                    <hr>
+                    <h5 class="footnote-header">Authors:</h5>
+                    <p id="authors">Rayhane Mama, Marc S. Tyndel, Hashiam Kadhim, Cole Clifford, Ragavan
+                        Thurairatnam</p>
+
+                    <hr>
+                    <h5 class="footnote-header">Acknowledgments:</h5>
+                    <p id="acknowledgments">We would like to thank Alex Krizhevsky for his ideas and mentorship.
+                    The authors would like to thank Alex Krizhevsky for his mentorship and insightful discussions. The authors also thank Alyssa Kuhnert, Aydin Polat,
+                        Joe Palermo, Pippin Lee, Stephen Piron, and Vince Wong for feedback and support.
+                    </p>
+
+                    <hr>
+                    <h5 class="footnote-header">License:</h5>
+                    <p id="license">
+                        This works is purely done for research purposes. We do not own the rights to the original Last Week Tonight videos.<br>
+                        The dataset was created using content downloaded from the official HBO Last Week
+                        Tonight <a href="https://www.youtube.com/user/LastWeekTonight">youtube
+                            channel</a>.<br>
+                        The original videos used in this project fall under the Youtube standard <a
+                                href="https://www.youtube.com/t/terms">license</a>.
+                    </p>
+                </div>
+            </div>
+</div>
+</body>
+</html>

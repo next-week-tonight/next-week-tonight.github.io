@@ -1,0 +1,173 @@
+.entire-page {
+    position: relative;
+    overflow: auto;
+    margin: 0 auto;
+    padding: 0;
+}
+
+body {
+    margin-bottom: 50px;
+    font-family: 'Roboto', sans-serif;
+}
+
+header {
+    width: 1800px; /*100%;*/
+    background-color: rgba(32,178,170,0.7);
+    margin: 0 auto;
+    padding: 0;
+    overflow: auto;
+    min-width: 100%;
+}
+
+.header-wrapper {
+    width: 1800px;
+    margin: 0 auto;
+    padding: 0;
+    align-content: center;
+    text-align: center;
+    height: 520px;
+    /*overflow: auto;*/
+}
+
+.header-wrapper h2 {
+    width: 990px;
+    margin: 0;
+    padding: 0;
+    padding-top: 15px;
+    margin-left: 20px;
+    color: white;
+    font-style: italic;
+    font-size: 30px;
+    text-align: left;
+    float: left;
+}
+
+.header-wrapper h4 {
+    width: 900px;
+    margin: 0;
+    padding: 0;
+    padding-top: 20px;
+    margin-left: 20px;
+    color: white;
+    font-style: italic;
+    font-size: 15px;
+    text-align: left;
+    float: left;
+}
+
+.header-wrapper img {
+    margin: 0;
+    padding: 0;
+    margin-left: 35%;
+    /*float: right;*/
+    width: 65%;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.content-wrapper {
+    width: 1280px; /*71.3%;*/
+    margin: 0 auto;
+    text-align: center;
+    /*background-color: rgb(245, 245, 243);*/
+    /*box-shadow: 3px 3px 5px 0px rgba(174, 173, 173, 0.75);*/
+    /*-webkit-box-shadow: 3px 3px 5px 0px rgba(174, 173, 173, 0.75);*/
+    /*-moz-box-shadow: 3px 3px 5px 0px rgba(174, 173, 173, 0.75);*/
+    padding-top: 30px;
+    /*overflow: auto;*/
+}
+
+.footnote-section {
+    margin: 0 auto;
+    color: #808080;
+    margin-top: 70px;
+}
+
+.footnote-header {
+    width: 10%;
+    margin: 0 auto;
+    padding: 0;
+    text-align: justify;
+    float: left;
+    margin-top: 2px;
+}
+
+.footnote-section p {
+    margin: 0 auto;
+    margin-top: 5px;
+    padding: 0;
+    font-size: 15px;
+    text-align: justify;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 200;
+}
+
+.h3_explainer, p {
+    margin: 0 auto;
+    padding: 0;
+    font-size: 20px;
+    width: 71.3%;
+    line-height: 1.4em;
+    text-align: justify;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    margin-bottom: 30px;
+    margin-top: 15px;
+}
+
+.content-wrapper h1, .content-wrapper h2 {
+    margin-top: 10px;
+}
+
+.content-wrapper h3 {
+    margin-top: 50px;
+}
+
+h1, h2, h3 {
+    margin: 0 auto;
+    padding: 0;
+    width: 71.3%;
+    text-align: justify;
+    font-family: 'Roboto', sans-serif;
+}
+
+.content-wrapper h4 {
+    margin: 0 auto;
+    padding: 0;
+    margin-top: 30px;
+}
+
+
+table {
+    margin: 0 auto;
+    padding: 0;
+}
+
+iframe {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 60px;
+    border: 0px;
+}
+
+/*hr {*/
+/*    width: 71.3%;*/
+/*}*/
+
+sup {
+    font-size: smaller;
+    font-weight: normal;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+.footnote-ref a, .reference-ref a, .footnote-section a {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+}
